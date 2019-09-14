@@ -1,11 +1,31 @@
-// TODO(bobbyluig): Switch this to the production endpoint.
-var PLAID_ENV = 'sandbox';
-var PLAID_ENDPOINT = 'https://sandbox.plaid.com/';
+function getAllAccounts() {
+  const keys = {};
+  keys[STORAGE_TOKENS] = {};
 
-// TODO(bobbyluig): The secret key should not be stored here.
-var PLAID_CLIENT_ID = '5d01659c1c640200135de6f6';
-var PLAID_PUBLIC_KEY = '9a6fba9148382e6bcc57e8a0f93850';
-var PLAID_SECRET_KEY = '683dcc0ab325c92a769e815f50b41a';
+  return chrome.storage.promise.local.get(keys)
+    .then(result => {
+      return Object.values(result[STORAGE_TOKENS]).map(accessToken => {
+        return accountsGet(accessToken);
+      })
+    })
+    .then(promises => Promise.all(promises))
+    .then(items => items.flatMap(item => item.accounts));
+}
+
+function addItem(publicToken, metadata) {
+  const keys = {};
+  keys[STORAGE_TOKENS] = {};
+
+  return exchangeToken(publicToken)
+    .then(response => {
+      return chrome.storage.promise.local.get(keys)
+        .then(result => {
+          result[STORAGE_TOKENS][metadata.institution.institution_id] = response.access_token;
+          return result;
+        })
+        .then(chrome.storage.promise.local.set);
+    });
+}
 
 $(document).ready(function () {
   var linkHandler = Plaid.create({
@@ -17,9 +37,7 @@ $(document).ready(function () {
     language: 'en',
     userLegalName: 'Lujing Cen',
     userEmailAddress: 'lujingcen@gmail.com',
-    onSuccess: function(publicToken, metadata) {
-      alert(publicToken);
-    }
+    onSuccess: addItem
   });
 
   $('#link').click(function () {
