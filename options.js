@@ -1,16 +1,4 @@
-function getAllAccounts() {
-  return getStorage()
-    .then(items => {
-      return Object.values(items).map(item => {
-        return accountsGet(item.accessToken);
-      })
-    })
-    .then(promises => Promise.all(promises))
-    .then(items => items.flatMap(item => item.accounts));
-}
-
 function addItem(publicToken, metadata) {
-  console.log(metadata);
   return exchangeToken(publicToken)
     .then(response => {
       return getStorage()

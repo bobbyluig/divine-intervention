@@ -31,14 +31,6 @@ function postData(url = '', data = {}) {
     .then(response => response.json());
 }
 
-function accountsGet(accessToken) {
-  return postData(PLAID_ENDPOINT + '/accounts/get', {
-    client_id: PLAID_CLIENT_ID,
-    secret: PLAID_SECRET_KEY,
-    access_token: accessToken
-  })
-}
-
 function balanceGet(accessToken) {
   return postData(PLAID_ENDPOINT + '/accounts/balance/get', {
     client_id: PLAID_CLIENT_ID,
@@ -53,6 +45,33 @@ function exchangeToken(publicToken) {
     secret: PLAID_SECRET_KEY,
     public_token: publicToken
   })
+}
+
+function transactionsGet(accessToken) {
+  const startDateString = new Date().toISOString().slice(0, 10);
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() - 5);
+  const endDateString = endDate.toISOString().slice(0, 10);
+
+  return postData(PLAID_ENDPOINT + '/item/public_token/exchange', {
+    client_id: PLAID_CLIENT_ID,
+    secret: PLAID_SECRET_KEY,
+    access_token: accessToken,
+    start_date: startDateString,
+    end_date: endDateString,
+  })
+}
+
+function getAllBalances() {
+  return getStorage()
+    .then(items => Object.values(items).map(item => balanceGet(item.accessToken)))
+    .then(promises => Promise.all(promises))
+    .then(items => items.flatMap(item => item.accounts));
+}
+
+function getAllAccounts() {
+  return getStorage()
+    .then(items => Object.values(items).flatMap(item => item.accounts));
 }
 
 function getVisibleText() {
