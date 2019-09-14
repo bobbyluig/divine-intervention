@@ -1,11 +1,8 @@
 function getAllAccounts() {
-  const keys = {};
-  keys[STORAGE_TOKENS] = {};
-
-  return chrome.storage.promise.local.get(keys)
-    .then(result => {
-      return Object.values(result[STORAGE_TOKENS]).map(accessToken => {
-        return accountsGet(accessToken);
+  return getStorage()
+    .then(items => {
+      return Object.values(items).map(item => {
+        return accountsGet(item.accessToken);
       })
     })
     .then(promises => Promise.all(promises))
@@ -13,17 +10,18 @@ function getAllAccounts() {
 }
 
 function addItem(publicToken, metadata) {
-  const keys = {};
-  keys[STORAGE_TOKENS] = {};
-
+  console.log(metadata);
   return exchangeToken(publicToken)
     .then(response => {
-      return chrome.storage.promise.local.get(keys)
+      return getStorage()
         .then(result => {
-          result[STORAGE_TOKENS][metadata.institution.institution_id] = response.access_token;
+          result[metadata.institution.institution_id] = {
+            accessToken: response.access_token,
+            accounts: metadata.accounts
+          };
           return result;
         })
-        .then(chrome.storage.promise.local.set);
+        .then(setStorage);
     });
 }
 

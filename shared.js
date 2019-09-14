@@ -7,7 +7,18 @@ const PLAID_CLIENT_ID = '5d01659c1c640200135de6f6';
 const PLAID_PUBLIC_KEY = '9a6fba9148382e6bcc57e8a0f93850';
 const PLAID_SECRET_KEY = '683dcc0ab325c92a769e815f50b41a';
 
-const STORAGE_TOKENS = 'divineInterventionTokens';
+function getStorage() {
+  return chrome.storage.promise.local.get({
+    divineIntervention: {},
+  })
+    .then(result => result.divineIntervention);
+}
+
+function setStorage(value) {
+  return chrome.storage.promise.local.set({
+    divineIntervention: value,
+  });
+}
 
 function postData(url = '', data = {}) {
   return fetch(url, {
