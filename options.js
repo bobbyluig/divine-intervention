@@ -14,7 +14,7 @@ function addItem(publicToken, metadata) {
 }
 
 $(document).ready(function () {
-  var linkHandler = Plaid.create({
+  const linkHandler = Plaid.create({
     clientName: 'Divine Intervention',
     countryCodes: ['US'],
     env: PLAID_ENV,
