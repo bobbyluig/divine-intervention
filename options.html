@@ -6,7 +6,6 @@
 </head>
 <body>
 
-
 <div class="jumbotron">
   <h1 class="display-4">Divine Intervention</h1>
   <p class="lead">Financial information when you need it the most.</p>
@@ -14,7 +13,7 @@
   <p>
     It is easy to exceed the credit limit or overdraft a debit card simply out of ignorance. 
     Banks notify you only in the aftermath when they've charged the fees already - a situation that
-    could have been avoided if only you knew about your low balances. 
+    could have been avoided if only you knew about your low balances beforehand. 
   </p>
   <p>
     From now on, we will intervene every time you're about to overspend.
@@ -22,13 +21,12 @@
     that will exceed any of your financial limits. You can visualize how your balance will be affected by the purchase
     so that you can always make well-informed purchasing decisions. 
   </p>
-  <a id="link" class="btn btn-primary btn-lg" href="#" role="button">Add a bank account</a>
+  <a class="btn btn-primary btn-lg" href="#" id="link" role="button">Add a bank account</a>
 </div>
-<!-- <form>
-  <div style="text-align: center;">
-    <button id="link" type="submit" class="btn btn-primary">Add a bank account</button>
-  </div>
-</form> -->
+
+<ul id="institutions" class="list-group">
+  <!-- data will be injected here -->
+</ul>
 
 <script src="lib/js/jquery.min.js"></script>
 <script src="lib/js/bootstrap.bundle.min.js"></script>
