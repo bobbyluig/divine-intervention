@@ -17,6 +17,8 @@
       "js": [
         "lib/js/chart.min.js",
         "lib/js/jquery.min.js",
+        "lib/js/chrome-storage-promise.js",
+        "shared.js",
         "inject.js"
       ]
     }

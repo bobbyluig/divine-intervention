@@ -7,6 +7,15 @@ const PLAID_CLIENT_ID = '5d01659c1c640200135de6f6';
 const PLAID_PUBLIC_KEY = '9a6fba9148382e6bcc57e8a0f93850';
 const PLAID_SECRET_KEY = '683dcc0ab325c92a769e815f50b41a';
 
+const EXTRACTORS = [
+  {
+    match: url => url.startsWith('https://www.amazon.com/gp/buy/payselect'),
+    total: () => document.body.getElementsByClassName('grand-total-price')[0].innerText.slice(1),
+    card: () => document.body.getElementsByClassName('pmts-selected')[0]
+      .getElementsByClassName('pmts-cc-number')[0].innerText.slice(10)
+  }
+];
+
 function getStorage() {
   return chrome.storage.promise.local.get({
     divineIntervention: {},
