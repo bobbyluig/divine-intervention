@@ -12,7 +12,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.amazon.com/*"
+        "<all_urls>"
       ],
       "js": [
         "lib/js/chart.min.js",

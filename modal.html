@@ -1,15 +1,28 @@
+<html lang="en">
+<head>
+  <title>Modal</title>
+  <link rel="stylesheet" href="lib/css/bootstrap.min.css">
+  <link rel="stylesheet" href="modal.css">
+</head>
+<body>
 <div id="divine-backdrop"></div>
 <div id="divine-modal">
-    <div class="card mb-3">
-        <div id="divine-other">
-            <canvas id="Overall" width= "700" height="100"></canvas>
-        </div>
-        
-        <!-- <img src="" class="card-img-top" alt="..."> -->
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
+      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.
+        This content is a little bit longer.</p>
+      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+
+      <div class="divine-chart">
+        <canvas id="Overall"></canvas>
       </div>
+    </div>
+  </div>
 </div>
+
+<script src="lib/js/jquery.min.js"></script>
+<script src="lib/js/chart.min.js"></script>
+<script src="modal.js"></script>
+</body>
+</html>
