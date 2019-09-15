@@ -13,6 +13,7 @@
         "<all_urls>"
       ],
       "js": [
+        "lib/js/chart.min.js",
         "inject.js"
       ]
     }
