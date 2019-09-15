@@ -18,6 +18,7 @@ fetch(chrome.runtime.getURL('modal.html')).then(html => {
         loadCSS(shadowRoot, 'lib/css/bootstrap.min.css');
         loadCSS(shadowRoot, 'modal.css');
         document.body.appendChild(div);
+        $('#divine-backdrop', shadowRoot).click(() => $(div).remove());
         charts = data2Charts(exampleUser, "3333", 20)
     });
 });
@@ -159,3 +160,4 @@ function data2Charts(plaidObj, card, cost) {
 
     return [overallChart, cardChart]
 }
+
