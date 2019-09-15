@@ -2,15 +2,28 @@ function addItem(publicToken, metadata) {
   return exchangeToken(publicToken)
     .then(response => {
       return getStorage()
-        .then(result => {
-          result[metadata.institution.institution_id] = {
+        .then(storage => {
+          const items = storage.items || {};
+          items[metadata.institution.institution_id] = {
             accessToken: response.access_token,
             accounts: metadata.accounts
           };
-          return result;
+          storage.items = items;
+          return storage;
         })
         .then(setStorage);
     });
+}
+
+function removeItem(institution) {
+  return getStorage()
+    .then(storage => {
+      const items = storage.items || {};
+      delete items[institution];
+      storage.items = items;
+      return storage;
+    })
+    .then(setStorage);
 }
 
 $(document).ready(function () {

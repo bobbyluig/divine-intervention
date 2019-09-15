@@ -64,6 +64,7 @@ function transactionsGet(accessToken) {
 
 function getAllBalances() {
   return getStorage()
+    .then(storage => storage.items || {})
     .then(items => Object.values(items).map(item => balanceGet(item.accessToken)))
     .then(promises => Promise.all(promises))
     .then(items => items.flatMap(item => item.accounts));
@@ -71,7 +72,13 @@ function getAllBalances() {
 
 function getAllAccounts() {
   return getStorage()
+    .then(storage => storage.items || {})
     .then(items => Object.values(items).flatMap(item => item.accounts));
+}
+
+function getAllAccountsByIns() {
+  return getStorage()
+    .then(storage => storage.items || {});
 }
 
 function getVisibleText() {

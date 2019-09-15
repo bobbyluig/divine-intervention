@@ -1,35 +1,35 @@
 exampleUser = [{
-  "account_id": "vzeNDwK7KQIm4yEog683uElbp9GRLEFXGK98D",
-  "balances": {
-    "available": 200,
-    "current": 200,
-    "limit": null,
-    "iso_currency_code": "USD",
-    "unofficial_currency_code": null,
+  'account_id': 'vzeNDwK7KQIm4yEog683uElbp9GRLEFXGK98D',
+  'balances': {
+    'available': 200,
+    'current': 200,
+    'limit': null,
+    'iso_currency_code': 'USD',
+    'unofficial_currency_code': null,
   },
-  "mask": "0000",
-  "name": "Plaid Checking",
-  "official_name": "Plaid Gold Checking",
-  "subtype": "checking",
-  "type": "depository",
-  "verification_status": null
+  'mask': '0000',
+  'name': 'Plaid Checking',
+  'official_name': 'Plaid Gold Checking',
+  'subtype': 'checking',
+  'type': 'depository',
+  'verification_status': null
 }, {
-  "account_id": "6Myq63K1KDSe3lBwp7K1fnEbNGLV4nSxalVdW",
-  "balances": {
-    "available": null,
-    "current": 20,
-    "limit": 50,
-    "iso_currency_code": "USD",
-    "unofficial_currency_code": null,
+  'account_id': '6Myq63K1KDSe3lBwp7K1fnEbNGLV4nSxalVdW',
+  'balances': {
+    'available': null,
+    'current': 40,
+    'limit': 50,
+    'iso_currency_code': 'USD',
+    'unofficial_currency_code': null,
   },
-  "mask": "3333",
-  "name": "Plaid Credit Card",
-  "official_name": "Plaid Diamond Credit Card",
-  "subtype": "credit card",
-  "type": "credit"
+  'mask': '3333',
+  'name': 'Plaid Credit Card',
+  'official_name': 'Plaid Diamond Credit Card',
+  'subtype': 'credit card',
+  'type': 'credit'
 }];
 
-function generateChart(data, labels) {
+function generateChart(data, labels, id) {
   const [balance, cost] = data;
   const [yLabel, barFragmentLabelLeft, barFragmentLabelRight] = labels;
 
@@ -44,7 +44,7 @@ function generateChart(data, labels) {
     [barFragmentColorLeft, barFragmentColorRight] = ['#FF0000', '#FF7F7F'];
   }
 
-  const canvas = document.getElementById(yLabel);
+  const canvas = document.getElementById(id);
   canvas.width = $(canvas.parentNode).width();
   canvas.height = $(canvas.parentNode).height();
 
@@ -94,13 +94,13 @@ function data2Charts(plaidObj, card, cost) {
   let overallBalance = 0;
   let cardBalance = 0;
   let limit = 0;
-  let typeCard = "depository";
+  let typeCard = 'depository';
 
   let account;
-  for (var i in plaidObj) {
+  for (const i in plaidObj) {
     account = plaidObj[i];
 
-    if (account.type === "credit") {
+    if (account.type === 'credit') {
       overallBalance -= account.balances.current;
     } else {
       overallBalance += account.balances.current;
@@ -114,18 +114,16 @@ function data2Charts(plaidObj, card, cost) {
   }
 
   // if typeCard is null, then give an error?
-  overallChart = generateChart([overallBalance, cost], ["Overall", "Avaliable funds", "Cost of purchase"]);
+  const overallChart = generateChart([overallBalance, cost], ['Overall', 'Remaining Funds', 'Cost of Purchase'], 'overall-chart');
 
   // only show card chart if overdraft will occur on that card and not overall
   let cardChart;
-  if (typeCard === "credit") {
-    if (limit < cardBalance + cost) {
-      cardChart = generateChart([limit, cardBalance + cost], ["Card", "Avaliable funds", "Cost of purchase"]);
-    }
-  } else {
-    if (cardBalance < cost) {
-      cardChart = generateChart([cardBalance, cost], ["Card", "Avaliable funds", "Cost of purchase"]);
-    }
+  if (typeCard === 'credit' && limit < cardBalance + cost) {
+    $('#card-chart').parent().show();
+    cardChart = generateChart([limit, cardBalance + cost], ['Card', 'Remaining Funds', 'Cost of Purchase'], 'card-chart');
+  } else if (cardBalance < cost) {
+    $('#card-chart').parent().show();
+    cardChart = generateChart([cardBalance, cost], ['Card', 'Remaining Funds', 'Cost of Purchase'], 'card-chart');
   }
 
   return [overallChart, cardChart];
@@ -133,5 +131,5 @@ function data2Charts(plaidObj, card, cost) {
 
 $(document).ready(() => {
   $('#divine-backdrop').click(() => parent.postMessage({method: 'closeModal'}, '*'));
-  data2Charts(exampleUser, "3333", 20);
+  data2Charts(exampleUser, '3333', 20);
 });
