@@ -7,15 +7,28 @@
 <body>
 <div id="divine-backdrop"></div>
 <div id="divine-modal">
-  <div class="card mb-3">
+  <div class="card">
     <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.
-        This content is a little bit longer.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      <div id="divine-yes" class="row no-gutters" style="display:none;">
+        <div class="alert alert-success" role="alert">
+          <h1 class="alert-heading">Don't worry!</h1>
+          You should be okay making this purchase!
+        </div>
+      </div>
+
+      <div id="divine-no" class="row no-gutters" style="display:none;">
+        <div class="alert alert-danger" role="alert">
+          <h1 class="alert-heading"></h1>
+          You may not want to make this purchase!
+        </div>
+      </div>
 
       <div class="divine-chart">
-        <canvas id="Overall"></canvas>
+        <canvas id="overall-chart"></canvas>
+      </div>
+
+      <div class="divine-chart" style="display:none;">
+        <canvas id="card-chart"></canvas>
       </div>
     </div>
   </div>

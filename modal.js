@@ -17,8 +17,8 @@ exampleUser = [{
   'account_id': '6Myq63K1KDSe3lBwp7K1fnEbNGLV4nSxalVdW',
   'balances': {
     'available': null,
-    'current': 40,
-    'limit': 50,
+    'current': 120,
+    'limit': 200,
     'iso_currency_code': 'USD',
     'unofficial_currency_code': null,
   },
@@ -83,6 +83,12 @@ function generateChart(data, labels, id) {
   });
 }
 
+function randomInteger(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // Given a list of the bank accounts for the user, the card being used,
 // cost of purchase. Returns a list of charts for overall, budget, and
 // card balances
@@ -113,20 +119,45 @@ function data2Charts(plaidObj, card, cost) {
     }
   }
 
-  // if typeCard is null, then give an error?
-  const overallChart = generateChart([overallBalance, cost], ['Overall', 'Remaining Funds', 'Cost of Purchase'], 'overall-chart');
+  const noImagePromise = new Promise((resolve, reject) => {
+    const noImage = $('<img>');
+    noImage.attr('src', 'img/no/' + randomInteger(1, 14) + '.gif');
+    noImage.attr('height', '106');
+    noImage.appendTo($('#divine-no'));
+    noImage.on('load', e => resolve());
+  });
 
-  // only show card chart if overdraft will occur on that card and not overall
-  let cardChart;
-  if (typeCard === 'credit' && limit < cardBalance + cost) {
-    $('#card-chart').parent().show();
-    cardChart = generateChart([limit, cardBalance + cost], ['Card', 'Remaining Funds', 'Cost of Purchase'], 'card-chart');
-  } else if (cardBalance < cost) {
-    $('#card-chart').parent().show();
-    cardChart = generateChart([cardBalance, cost], ['Card', 'Remaining Funds', 'Cost of Purchase'], 'card-chart');
-  }
+  const yesImagePromise = new Promise((resolve, reject) => {
+    const yesImage = $('<img>');
+    yesImage.attr('src', 'img/yes/' + randomInteger(1, 10) + '.gif');
+    yesImage.attr('height', '106');
+    yesImage.appendTo($('#divine-yes'));
+    yesImage.on('load', e => resolve());
+  });
 
-  return [overallChart, cardChart];
+  Promise.all([noImagePromise, yesImagePromise]).then(() => {
+    // only show card chart if overdraft will occur on that card and not overall
+    if (typeCard === 'credit' && limit < cardBalance + cost) {
+      $('#divine-no h1').text('Overdraft!');
+      $('#divine-no').show();
+      $('#card-chart').parent().show();
+      generateChart([limit, cardBalance + cost], ['Card', 'Remaining Funds', 'Cost of Purchase'], 'card-chart');
+    } else if (typeCard !== 'credit' && cardBalance < cost) {
+      $('#divine-no h1').text('Overdraft!');
+      $('#divine-no').show();
+      $('#card-chart').parent().show();
+      generateChart([cardBalance, cost], ['Card', 'Remaining Funds', 'Cost of Purchase'], 'card-chart');
+    } else if (overallBalance < cost) {
+      $('#divine-no h1').text('In Debt!');
+      $('#divine-no').show();
+    } else {
+      $('#divine-yes').show();
+    }
+
+    // if typeCard is null, then give an error?
+    generateChart([overallBalance, cost], ['Overall', 'Remaining Funds', 'Cost of Purchase'], 'overall-chart');
+  });
+
 }
 
 $(document).ready(() => {

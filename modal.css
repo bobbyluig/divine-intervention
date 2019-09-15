@@ -21,8 +21,8 @@ body {
 
 #divine-modal {
   position: fixed;
-  width: 60%;
-  height: 80%;
+  max-width: 80%;
+  max-height: 80%;
   overflow-y: auto;
   left: 50%;
   top: 50%;
