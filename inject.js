@@ -1,8 +1,35 @@
 let iframe;
 
-function isCheckoutPage() {
-  return true;
-}
+exampleUser = [{
+  'account_id': 'vzeNDwK7KQIm4yEog683uElbp9GRLEFXGK98D',
+  'balances': {
+    'available': 200,
+    'current': 200,
+    'limit': null,
+    'iso_currency_code': 'USD',
+    'unofficial_currency_code': null,
+  },
+  'mask': '0000',
+  'name': 'Plaid Checking',
+  'official_name': 'Plaid Gold Checking',
+  'subtype': 'checking',
+  'type': 'depository',
+  'verification_status': null
+}, {
+  'account_id': '6Myq63K1KDSe3lBwp7K1fnEbNGLV4nSxalVdW',
+  'balances': {
+    'available': null,
+    'current': 140,
+    'limit': 200,
+    'iso_currency_code': 'USD',
+    'unofficial_currency_code': null,
+  },
+  'mask': '3333',
+  'name': 'Plaid Credit Card',
+  'official_name': 'Plaid Diamond Credit Card',
+  'subtype': 'credit card',
+  'type': 'credit'
+}];
 
 function showModal() {
   iframe = document.createElement('iframe');
@@ -20,6 +47,29 @@ window.addEventListener('message', event => {
   }
 }, false);
 
-showModal();
+function run() {
+  const url = window.location.href;
 
+  for (const extractor of EXTRACTORS) {
+    if (extractor.match(url)) {
+      getAllBalances().then(user => {
+        const args = [user, extractor.card(), extractor.total()];
+        console.log(extractor.card());
+        showModal();
+        $(iframe).on('load', () => {
+          iframe.contentWindow.postMessage({method: 'data2Charts', args: args}, '*');
+        });
+      });
+      return;
+    }
+  }
+}
+
+$(document).ready(() => {
+  run();
+
+  window.onhashchange = () => {
+    run();
+  };
+});
 

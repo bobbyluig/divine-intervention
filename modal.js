@@ -38,7 +38,7 @@ function generateChart(data, labels, id) {
   let costBar = cost;
   let barFragmentColorLeft, barFragmentColorRight;
 
-  if (balance > cost) {
+  if (balance >= cost) {
     [barFragmentColorLeft, barFragmentColorRight] = ['#00FF00', '#98FB98'];
   } else { // overdraft
     [barFragmentColorLeft, barFragmentColorRight] = ['#FF0000', '#FF7F7F'];
@@ -101,6 +101,7 @@ function data2Charts(plaidObj, card, cost) {
   let cardBalance = 0;
   let limit = 0;
   let typeCard = 'depository';
+  let cardFound = false;
 
   let account;
   for (const i in plaidObj) {
@@ -113,6 +114,7 @@ function data2Charts(plaidObj, card, cost) {
     }
 
     if (card === account.mask) {
+      cardFound = true;
       typeCard = account.type;
       limit = account.balances.limit;
       cardBalance += account.balances.current;
@@ -157,10 +159,17 @@ function data2Charts(plaidObj, card, cost) {
     // if typeCard is null, then give an error?
     generateChart([overallBalance, cost], ['Overall', 'Remaining Funds', 'Cost of Purchase'], 'overall-chart');
   });
-
 }
+
+window.addEventListener('message', event => {
+  switch (event.data.method) {
+    case 'data2Charts': {
+      data2Charts(...event.data.args);
+    }
+  }
+}, false);
 
 $(document).ready(() => {
   $('#divine-backdrop').click(() => parent.postMessage({method: 'closeModal'}, '*'));
-  data2Charts(exampleUser, '3333', 20);
+  // data2Charts(exampleUser, '3333', 20);
 });
