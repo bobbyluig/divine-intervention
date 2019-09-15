@@ -10,7 +10,7 @@ const PLAID_SECRET_KEY = '683dcc0ab325c92a769e815f50b41a';
 const EXTRACTORS = [
   {
     match: url => url.startsWith('https://www.amazon.com/gp/buy/payselect'),
-    total: () => document.body.getElementsByClassName('grand-total-price')[0].innerText.slice(1),
+    total: () => document.body.getElementsByClassName('grand-total-price')[0].innerText.slice(1).replace(/,/g, ''),
     card: () => document.body.getElementsByClassName('pmts-selected')[0]
       .getElementsByClassName('pmts-cc-number')[0].innerText.slice(10)
   }

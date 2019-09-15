@@ -1,35 +1,8 @@
 let iframe;
 
-exampleUser = [{
-  'account_id': 'vzeNDwK7KQIm4yEog683uElbp9GRLEFXGK98D',
-  'balances': {
-    'available': 200,
-    'current': 200,
-    'limit': null,
-    'iso_currency_code': 'USD',
-    'unofficial_currency_code': null,
-  },
-  'mask': '0000',
-  'name': 'Plaid Checking',
-  'official_name': 'Plaid Gold Checking',
-  'subtype': 'checking',
-  'type': 'depository',
-  'verification_status': null
-}, {
-  'account_id': '6Myq63K1KDSe3lBwp7K1fnEbNGLV4nSxalVdW',
-  'balances': {
-    'available': null,
-    'current': 140,
-    'limit': 200,
-    'iso_currency_code': 'USD',
-    'unofficial_currency_code': null,
-  },
-  'mask': '3333',
-  'name': 'Plaid Credit Card',
-  'official_name': 'Plaid Diamond Credit Card',
-  'subtype': 'credit card',
-  'type': 'credit'
-}];
+// {"override_accounts":[{"starting_balance":754.83,"type":"credit","subtype":"credit card","meta":{"name":"Amazon Prime Rewards Visa Signature Card","number":"0518","limit":1200}},{"starting_balance":2645.11,"type":"depository","subtype":"checking","meta":{"name":"Chase Checking","number":"8830"}},{"starting_balance":300.82,"type":"depository","subtype":"savings","meta":{"name":"Chase Saving","number":"4396"}}]}
+
+// {"override_accounts":[{"starting_balance":868.84,"type":"credit","subtype":"credit card","meta":{"name":"Savor One","number":"9241","limit":8000}}]}
 
 function showModal() {
   iframe = document.createElement('iframe');
