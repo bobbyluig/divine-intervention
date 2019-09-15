@@ -1,6 +1,8 @@
 {
   "manifest_version": 2,
   "name": "Divine Intervention",
+  "description": "Financial information when you need it most.",
+  "author": "Adil, Elton, Jing, Lujing",
   "version": "0.1",
   "background": {
     "scripts": [

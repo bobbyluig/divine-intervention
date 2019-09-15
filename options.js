@@ -21,8 +21,6 @@ $(document).ready(function () {
     key: PLAID_PUBLIC_KEY,
     product: ['transactions'],
     language: 'en',
-    userLegalName: 'Lujing Cen',
-    userEmailAddress: 'lujingcen@gmail.com',
     onSuccess: addItem
   });
 
