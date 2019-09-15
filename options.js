@@ -63,6 +63,7 @@ document.addEventListener('click', function (event) {
     const institution = Object.keys(items)[Number(event.target.id)] 
     delete items[institution]
     storage.items = items
+    setStorage(storage)
     document.getElementById(`institution-${id}`).remove()
   })
 }, false);
