@@ -47,29 +47,34 @@ window.addEventListener('message', event => {
   }
 }, false);
 
+let url;
+
 function run() {
-  const url = window.location.href;
+  if (window.location.href === url) {
+    setTimeout(run, 100);
+    return;
+  }
+
+  url = window.location.href;
 
   for (const extractor of EXTRACTORS) {
     if (extractor.match(url)) {
       getAllBalances().then(user => {
         const args = [user, extractor.card(), extractor.total()];
-        console.log(extractor.card());
         showModal();
         $(iframe).on('load', () => {
           iframe.contentWindow.postMessage({method: 'data2Charts', args: args}, '*');
         });
       });
+      setTimeout(run, 100);
       return;
     }
   }
+
+  setTimeout(run, 100);
 }
 
 $(document).ready(() => {
   run();
-
-  window.onhashchange = () => {
-    run();
-  };
 });
 
