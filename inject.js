@@ -127,33 +127,23 @@ function loadCSS(dom, file) {
   dom.appendChild(link);
 }
 
-const div = document.createElement('div');
-const shadowRoot = div.attachShadow({mode: 'open'});
-fetch(chrome.runtime.getURL('modal.html')).then(html => {
-  html.text().then(text => {
-    shadowRoot.innerHTML = text;
-    loadCSS(shadowRoot, 'lib/css/bootstrap.min.css');
-    loadCSS(shadowRoot, 'modal.css');
-    document.body.appendChild(div);
+function showModal() {
+  const div = document.createElement('div');
+  const shadowRoot = div.attachShadow({mode: 'open'});
+  fetch(chrome.runtime.getURL('modal.html')).then(html => {
+    html.text().then(text => {
+      shadowRoot.innerHTML = text;
+      loadCSS(shadowRoot, 'lib/css/bootstrap.min.css');
+      loadCSS(shadowRoot, 'modal.css');
+      document.body.appendChild(div);
+
+      $('#divine-backdrop', shadowRoot).click(() => $(div).remove());
+    });
   });
-});
+}
 
-
-    overallChart = generateChart([overallBalance, cost], ["Overall", "Avaliable funds", "Cost of purchase"]);
-
-    // only show card chart if overdraft will occur on that card and not overall
-    let cardChart;
-    if (typeCard === "credit") {
-        if (limit < cardBalance + cost) {
-            cardChart = generateChart([limit, cardBalance + cost], ["Card", "Avaliable funds", "Cost of purchase"])
-        };
-    } else {
-        if (cardBalance < cost) {
-            cardChart = generateChart([cardBalance, cost], ["Card", "Avaliable funds", "Cost of purchase"]);
-        }
-    }
-
-    return [overallChart, cardChart]
+if (isCheckoutPage()) {
+  showModal();
 }
 
 // charts = data2Charts(exampleUser, "0000", 2000)
