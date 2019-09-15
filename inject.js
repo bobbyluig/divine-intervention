@@ -1,3 +1,27 @@
+function isCheckoutPage() {
+    return true;
+}
+  
+function loadCSS(dom, file) {
+    const link = document.createElement('link');
+    link.setAttribute('rel', 'stylesheet');
+    link.setAttribute('type', 'text/css');
+    link.setAttribute('href', chrome.runtime.getURL(file));
+    dom.appendChild(link);
+}
+  
+const div = document.createElement('div');
+let shadowRoot = div.attachShadow({mode: 'open'});
+fetch(chrome.runtime.getURL('modal.html')).then(html => {
+    html.text().then(text => {
+        shadowRoot.innerHTML = text;
+        loadCSS(shadowRoot, 'lib/css/bootstrap.min.css');
+        loadCSS(shadowRoot, 'modal.css');
+        document.body.appendChild(div);
+        charts = data2Charts(exampleUser, "3333", 20)
+    });
+});
+
 exampleUser = [{
     "account_id": "vzeNDwK7KQIm4yEog683uElbp9GRLEFXGK98D",
     "balances": {
@@ -29,7 +53,7 @@ exampleUser = [{
     "type": "credit"
   }]
 
-  // Returns a stacked horizontal bar chart of one element
+// Returns a stacked horizontal bar chart of one element
 // data = [balance, cost]
 //  balance = current balance of the card (i.e. available funds) in $USD
 //  cost = size of pending purchase
@@ -50,9 +74,11 @@ function generateChart(data, labels){
     };
 
     // creating DOM element
-    var c = document.createElement("canvas")
-    c.id = "chart"
-    document.body.appendChild(c)
+    // var c = document.createElement("canvas")
+    // c.id = "chart"
+    // document.body.appendChild(c)
+
+    var c = shadowRoot.getElementById(yLabel);
 
     // generating stacked chart
     return new Chart(c, {
@@ -73,6 +99,8 @@ function generateChart(data, labels){
               ]
         },
         options: {
+            maintainAspectRatio: false,
+            responsive: false,
             scales: {
                 xAxes: [{
                     stacked: true
@@ -115,30 +143,6 @@ function data2Charts(plaidObj, card, cost) {
     }
 
     // if typeCard is null, then give an error?
-function isCheckoutPage() {
-  return true;
-}
-
-function loadCSS(dom, file) {
-  const link = document.createElement('link');
-  link.setAttribute('rel', 'stylesheet');
-  link.setAttribute('type', 'text/css');
-  link.setAttribute('href', chrome.runtime.getURL(file));
-  dom.appendChild(link);
-}
-
-const div = document.createElement('div');
-const shadowRoot = div.attachShadow({mode: 'open'});
-fetch(chrome.runtime.getURL('modal.html')).then(html => {
-  html.text().then(text => {
-    shadowRoot.innerHTML = text;
-    loadCSS(shadowRoot, 'lib/css/bootstrap.min.css');
-    loadCSS(shadowRoot, 'modal.css');
-    document.body.appendChild(div);
-  });
-});
-
-
     overallChart = generateChart([overallBalance, cost], ["Overall", "Avaliable funds", "Cost of purchase"]);
 
     // only show card chart if overdraft will occur on that card and not overall
@@ -155,6 +159,3 @@ fetch(chrome.runtime.getURL('modal.html')).then(html => {
 
     return [overallChart, cardChart]
 }
-
-// charts = data2Charts(exampleUser, "0000", 2000)
-charts = data2Charts(exampleUser, "3333", 20)
