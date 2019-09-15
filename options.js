@@ -52,8 +52,6 @@ $(document).ready(function () {
       getAllAccountsByIns().then(instituteToAccounts => renderAccountsByInstitutes(instituteToAccounts))
     }
   })
-
-
 });
 
 document.addEventListener('click', function (event) {
@@ -87,7 +85,7 @@ function renderAccountsByInstitutes(instituteToAccounts) {
     titleElem.innerHTML = `
       <div style="display: flex; justify-content: space-between">
         <h4>${institution}</h4>
-        <button type="button" id="${i}" class="btn btn-danger pull-right delete-button">Delete institution</button>
+        <button type="button" id="${i}" class="btn btn-danger pull-right delete-button">Delete</button>
       </div>
     `;
     institutionElem.appendChild(titleElem)
