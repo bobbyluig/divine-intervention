@@ -46,6 +46,14 @@ $(document).ready(function () {
   $('#link').click(function () {
     linkHandler.open();
   });
+
+  getStorage().then(storage => {
+    if (storage.items) {
+      getAllAccountsByIns().then(instituteToAccounts => renderAccountsByInstitutes(instituteToAccounts))
+    }
+  })
+
+
 });
 
 document.addEventListener('click', function (event) {
@@ -95,7 +103,7 @@ function loadResults(array, i) {
     let institution =  document.getElementById(`institution-${i}`)
     let item = document.createElement("div")
     item.className = "list-group-item"
-    item.innerHTML = `<p>Name: ${account.name}</p>`;
+    item.innerHTML = `<p>${account.name}</p>`;
     institution.appendChild(item)
   });
 }
