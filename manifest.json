@@ -9,6 +9,9 @@
       "background.js"
     ]
   },
+  "browser_action": {
+    "default_icon": "/img/icon16.png"
+  },
   "icons": { 
     "16": "/img/icon16.png",
     "48": "/img/icon48.png",
@@ -30,6 +33,7 @@
   ],
   "permissions": [
     "activeTab",
+    "tabs",
     "storage",
     "https://*.plaid.com/*"
   ],

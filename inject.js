@@ -78,3 +78,7 @@ $(document).ready(() => {
   run();
 });
 
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+    url = '';
+  });
